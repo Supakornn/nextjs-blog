@@ -58,7 +58,6 @@ interface Category extends Base {
   description: string;
 }
 
-
 interface MainImage {
   _type: 'image';
   asset: Reference;
