@@ -3,7 +3,7 @@ import urlFor from "@/lib/urlFor";
 import { groq } from "next-sanity";
 import Image from "next/image";
 import { PortableText } from "@portabletext/react";
-import RichTextComponents from "@/components/RichTextComponents";
+import { RichTextComponents } from "../../../../components/RichTextComponents";
 
 type Props = {
   params: {
@@ -11,11 +11,27 @@ type Props = {
   };
 };
 
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const query = groq`*[_type == 'post']
+  {
+    slug
+  }`;
+
+  const slugs: Post[] = await client.fetch(query);
+  const slugRoutes = slugs.map((slug) => slug.slug.current);
+
+  return slugRoutes.map((slug) => ({
+    slug
+  }));
+}
+
 async function Post({ params: { slug } }: Props) {
   const query = groq`
   *[_type == "post" && slug.current == $slug][0] {
     ...,
-    author->,
+    author->, 
     categories[]->,
   }
   `;

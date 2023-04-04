@@ -8,8 +8,6 @@ type Props = {
 };
 
 function BlogList({ posts }: Props) {
-  console.log(posts.map((post) => post));
-
   return (
     <div>
       <hr className="border-[#2cf608] mb-10" />
